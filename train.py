@@ -2,9 +2,9 @@ import os
 # the following lines are needed for arm macs
 os.environ['CC'] = '/opt/homebrew/opt/llvm/bin/clang'
 os.environ['CXX'] = '/opt/homebrew/opt/llvm/bin/clang'
-os.environ['CPPFLAGS'] = "-I/opt/homebrew/opt/llvm/include"
-os.environ['LDFLAGS'] = "-L/opt/homebrew/opt/llvm/lib"
-os.environ['WANDB_SILENT'] = "true"
+os.environ['CPPFLAGS'] = '-I/opt/homebrew/opt/llvm/include'
+os.environ['LDFLAGS'] = '-L/opt/homebrew/opt/llvm/lib'
+os.environ['WANDB_SILENT'] = 'true'
 
 import contextlib
 import uuid
@@ -35,7 +35,7 @@ from utils import (
 )
 
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 @torch.no_grad()
@@ -64,7 +64,7 @@ def evaluate(
     return np.asarray(episode_rewards), np.asarray(episode_l2_distance)
 
 
-@pyrallis.wrap()  # config_path='./config.yaml')
+@pyrallis.wrap(config_path='./config.yaml')
 def train(config: TrainConfig):
     wandb.init(
         config=asdict(config),
@@ -86,15 +86,15 @@ def train(config: TrainConfig):
         modify_reward(qdataset, config.dataset_id)
 
     if config.normalize_state:
-        state_mean, state_std = compute_mean_std(qdataset["observations"], eps=1e-3)
+        state_mean, state_std = compute_mean_std(qdataset['observations'], eps=1e-3)
     else:
         state_mean, state_std = 0, 1
 
-    qdataset["observations"] = normalize_states(
-        qdataset["observations"], state_mean, state_std
+    qdataset['observations'] = normalize_states(
+        qdataset['observations'], state_mean, state_std
     )
-    qdataset["next_observations"] = normalize_states(
-        qdataset["next_observations"], state_mean, state_std
+    qdataset['next_observations'] = normalize_states(
+        qdataset['next_observations'], state_mean, state_std
     )
 
     eval_env = wrap_env(eval_env, state_mean=state_mean, state_std=state_std)
@@ -107,9 +107,9 @@ def train(config: TrainConfig):
     replay_buffer.load_dataset(qdataset)
 
     if config.checkpoints_path is not None:
-        print(f"Checkpoints path: {config.checkpoints_path}")
+        print(f'Checkpoints path: {config.checkpoints_path}')
         os.makedirs(config.checkpoints_path, exist_ok=True)
-        with open(os.path.join(config.checkpoints_path, "config.yaml"), "w") as f:
+        with open(os.path.join(config.checkpoints_path, 'config.yaml'), 'w') as f:
             pyrallis.dump(config, f)
 
     # Set seeds
@@ -162,21 +162,21 @@ def train(config: TrainConfig):
                 device=DEVICE,
             )
 
-            wandb.log({"evaluation_return_scores": eval_scores.mean()}, step=step)
-            wandb.log({"evaluation_return_distances": eval_distances.mean()}, step=step)
+            wandb.log({'evaluation_return_scores': eval_scores.mean()}, step=step)
+            wandb.log({'evaluation_return_distances': eval_distances.mean()}, step=step)
             # optional normalized score logging, only if dataset has reference scores
             with contextlib.suppress(ValueError):
                 normalized_score = (
                     minari.get_normalized_score(dataset, eval_scores).mean() * 100
                 )
-                wandb.log({"normalized_score": normalized_score}, step=step)
+                wandb.log({'normalized_score': normalized_score}, step=step)
 
             if config.checkpoints_path is not None:
                 torch.save(
                     trainer.state_dict(),
-                    os.path.join(config.checkpoints_path, f"checkpoint_{step}.pt"),
+                    os.path.join(config.checkpoints_path, f'checkpoint_{step}.pt'),
                 )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     train()
