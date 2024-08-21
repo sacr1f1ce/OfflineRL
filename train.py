@@ -64,7 +64,7 @@ def evaluate(
     return np.asarray(episode_rewards), np.asarray(episode_l2_distance)
 
 
-@pyrallis.wrap(config_path='./config.yaml')
+@pyrallis.wrap()
 def train(config: TrainConfig):
     wandb.init(
         config=asdict(config),

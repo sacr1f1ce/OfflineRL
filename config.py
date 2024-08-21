@@ -20,7 +20,7 @@ class TrainConfig:
     actor_lr: float = 3e-4  # Actor learning rate
     actor_dropout: Optional[float] = None  # Adroit uses dropout for policy network
     # training params
-    dataset_id: str = "antmaze-medium-diverse-v1"  # Minari remote dataset name
+    dataset_id: str = "antmaze-umaze-v1"  # Minari remote dataset name
     update_steps: int = int(1e6)  # Total training networks updates
     buffer_size: int = int(1e7)  # Replay buffer size
     batch_size: int = 256  # Batch size for all networks
