@@ -2,7 +2,7 @@ import os
 import random
 from typing import Tuple, Union, Dict
 
-import gym
+import gymnasium as gym
 import minari
 import numpy as np
 import torch
@@ -37,7 +37,6 @@ def wrap_env(
     state_std: Union[np.ndarray, float] = 1.0,
     reward_scale: float = 1.0,
 ) -> gym.Env:
-    # PEP 8: E731 do not assign a lambda expression, use a def
     def normalize_state(state):
         # epsilon should be already added in std.
         state['observation'] = (state['observation'] - state_mean) / state_std

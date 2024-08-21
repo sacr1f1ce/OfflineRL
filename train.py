@@ -12,7 +12,7 @@ from typing import Dict
 from dataclasses import asdict
 
 import minari
-import gym
+import gymnasium as gym
 import pyrallis
 import torch
 import wandb
