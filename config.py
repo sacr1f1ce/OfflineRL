@@ -8,7 +8,7 @@ from dataclasses import dataclass
 class TrainConfig:
     # wandb params
     project: str = "IQL"
-    name: str = "test_run"
+    name: str = "Final"
     # model params
     gamma: float = 0.99  # Discount factor
     tau: float = 0.005  # Target network update rate
@@ -21,13 +21,13 @@ class TrainConfig:
     actor_dropout: Optional[float] = None  # Adroit uses dropout for policy network
     # training params
     dataset_id: str = "antmaze-umaze-v1"  # Minari remote dataset name
-    update_steps: int = int(1e6)  # Total training networks updates
+    update_steps: int = int(5e6)  # Total training networks updates
     buffer_size: int = int(1e7)  # Replay buffer size
     batch_size: int = 256  # Batch size for all networks
     normalize_state: bool = True  # Normalize states
     normalize_reward: bool = True  # Normalize reward
     # evaluation params
-    eval_every: int = 50  # How often (time steps) we evaluate
+    eval_every: int = 5000  # How often (time steps) we evaluate
     eval_episodes: int = 100  # How many episodes run during evaluation
     # general params
     train_seed: int = 0
